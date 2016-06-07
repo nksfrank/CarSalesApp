@@ -1,0 +1,18 @@
+﻿@model PentiaCodeTest.Models.CarPurchase
+
+    <tr>
+        <td class="col-md-4">
+            @Model.Car.CarMake.Name, @Model.Car.CarModel.Name, @Model.Car.Colour
+        </td>
+        <td class="col-md-4">
+            @Model.SalesPerson.Name @Model.SalesPerson.Surname
+        </td>
+        <td class="col-md-2">
+            @(Model.Car.RecommendPrice - Model.PricePaid)
+        </td>
+        <td class="col-md-2">
+            <div class="pull-right">
+                $@Model.PricePaid
+            </div>
+        </td>
+    </tr>

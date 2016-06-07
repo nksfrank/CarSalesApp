@@ -1,0 +1,45 @@
+﻿@model PentiaCodeTest.Models.ICustomerSearchCriteraView
+
+<ul class="list-group">
+    @using (Ajax.BeginForm("Search", "Home", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "customerlist", InsertionMode = InsertionMode.Replace }))
+    {
+        @Html.AntiForgeryToken()
+        <li class="list-group-item">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CustomerSearchModel.CustomerName)
+                @Html.TextBoxFor(model => model.CustomerSearchModel.CustomerName, new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.CustomerSearchModel.CustomerName)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CustomerSearchModel.CustomerStreet)
+                @Html.TextBoxFor(model => model.CustomerSearchModel.CustomerStreet, new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.CustomerSearchModel.CustomerStreet)
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                @Html.DropDownListFor(model => model.CustomerSearchModel.CarMakeId,
+                    new SelectList(Model.CustomerSearchModel.CarMakes, "Id", "Name"),
+                    "Select a car make",
+                    new {@class = "form-control", @onchange = "FillCarModel()"})
+                @Html.ValidationMessageFor(model => model.CustomerSearchModel.CarMakeId)
+            </div>
+            <div class="form-group">
+                @Html.DropDownListFor(model => model.CustomerSearchModel.CarModelId,
+                    new SelectList(Enumerable.Empty<SelectListItem>(), "Id", "Name"),
+                    new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.CustomerSearchModel.CarModelId)
+            </div>
+        </li>
+        <li class="list-group-item">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CustomerSearchModel.SalesPerson)
+                @Html.TextBoxFor(model => model.CustomerSearchModel.SalesPerson, new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.CustomerSearchModel.SalesPerson)
+            </div>
+            <div class="form-group">
+                <button class="btn btn-info btn-block" type="submit">Search</button>
+            </div>
+        </li>
+    }
+</ul>

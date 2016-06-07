@@ -1,30 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
+using LinqKit;
+using PentiaCodeTest.Models;
+using PentiaCodeTest.Services;
 
 namespace PentiaCodeTest.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly SalesContext _db = new SalesContext();
         public ActionResult Index()
         {
-            return View();
+            var viewModel = new IndexViewModel
+            {
+                Customers = _db.Persons.OfType<Customer>(),
+                CustomerSearchModel = new CustomerSearchFormViewModel
+                {
+                    CarMakes = _db.CarMakes.ToList(),
+                }
+            };
+
+            return View(viewModel);
         }
 
-        public ActionResult About()
+        [HttpPost]
+        public ActionResult Index(IndexViewModel model)
         {
-            ViewBag.Message = "Your application description page.";
+            if (!ModelState.IsValid) return View(model);
 
-            return View();
+            var predicate = SearchService.GetCustomerSearchPredicate(model.CustomerSearchModel);
+            model.Customers = _db.Persons.OfType<Customer>().AsExpandable().Where(predicate).ToList();
+            model.CustomerSearchModel.CarMakes = _db.CarMakes.ToList();
+            return View(model);
         }
 
-        public ActionResult Contact()
+        public ActionResult CarModels(int carMakeId = 0)
         {
-            ViewBag.Message = "Your contact page.";
+            return Json(_db.CarModels.Where(a => a.CarMakeId == carMakeId).OrderBy(a => a.Id).Select(a => new { a.Id, a.Name}), JsonRequestBehavior.AllowGet);
+        }
 
-            return View();
+        public ActionResult Search(IndexViewModel model)
+        {
+            var predicate = SearchService.GetCustomerSearchPredicate(model.CustomerSearchModel);
+            model.Customers = _db.Persons.OfType<Customer>().AsExpandable().Where(predicate).ToList();
+
+            return PartialView("_CustomerList", model);
         }
     }
 }

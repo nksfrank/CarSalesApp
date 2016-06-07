@@ -1,0 +1,6 @@
+﻿@model PentiaCodeTest.Models.ICustomerSearchResultsView
+
+@foreach (var customer in Model.Customers)
+{
+    @Html.Partial("_CustomerListItem", customer);
+}

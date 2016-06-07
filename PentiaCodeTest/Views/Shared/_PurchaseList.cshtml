@@ -1,0 +1,31 @@
+﻿
+@model PentiaCodeTest.Models.Customer
+
+<table class="table table-condensed collapse" id="purchase_@Model.Id">
+    <thead>
+    <tr>
+        <td class="col-md-4">
+            <strong>Car</strong>
+        </td>
+        <td class="col-md-4">
+            <strong>Sales Person</strong>
+        </td>
+        <td class="col-md-2">
+            <strong>Diff</strong>
+        </td>
+        <td class="col-md-2">
+            <div class="pull-right">
+                <strong>Price Paid</strong>
+            </div>
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var purchase in Model.CarPurchases)
+        {
+            {
+                Html.RenderPartial("_PurchaseListItem", purchase);
+            }
+        }
+    </tbody>
+</table>
